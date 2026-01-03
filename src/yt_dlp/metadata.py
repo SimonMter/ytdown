@@ -2,6 +2,8 @@
 import json
 import subprocess
 from .manager import find_yt_dlp
+import urllib.request
+from pathlib import Path 
 
 def fetch_metadata(url: str) -> dict:
     yt_dlp = find_yt_dlp()
@@ -32,3 +34,5 @@ def extract_video_formats(info: dict):
             })
     return formats
 
+def download_thumbnail(url: str, target: Path):
+    urllib.request.urlretrieve(url, target)

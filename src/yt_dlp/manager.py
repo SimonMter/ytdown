@@ -3,6 +3,9 @@ import subprocess
 from pathlib import Path
 import shutil
 import sys
+from typing import Iterator 
+
+
 
 def find_yt_dlp() -> Path:
     local = Path(sys.argv[0]).resolve().parent / "yt-dlp"
@@ -31,3 +34,18 @@ def run_yt_dlp(args: list[str]) -> int:
 
     return proc.wait()
 
+
+def run_yt_dlp_stream(args):
+    # Use the system yt-dlp executable
+    cmd = ["yt-dlp"] + args
+    proc = subprocess.Popen(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True
+    )
+
+    for line in proc.stdout:
+        yield line.strip()
+
+    proc.wait()
